@@ -1,0 +1,206 @@
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APIHyS - Lic. Hernán Mariani</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background-color: #f1f5f9; font-family: 'Inter', sans-serif; }
+        .main-card { border-radius: 2.5rem; }
+        .header-gradient { background: linear-gradient(180deg, #1d4ed8 0%, #1e40af 100%); }
+        .service-btn { transition: all 0.2s ease; }
+        .service-btn:active { transform: scale(0.97); }
+        .glass-modal { background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(8px); }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4 py-8">
+
+    <div class="max-w-md w-full space-y-6">
+        
+        <!-- Tarjeta Principal (Pública) -->
+        <div class="main-card bg-white shadow-xl overflow-hidden">
+            <div class="header-gradient p-10 flex flex-col items-center text-white relative">
+                <div class="bg-white p-3 rounded-2xl shadow-lg mb-4 w-20 h-20 flex items-center justify-center">
+                    <img src="https://ui-avatars.com/api/?name=API+HyS&background=fff&color=1e40af&bold=true" alt="Logo" class="rounded-lg">
+                </div>
+                <h1 class="text-3xl font-bold tracking-tighter uppercase italic">APIHYS</h1>
+                <p class="text-blue-100 text-[10px] opacity-80 uppercase tracking-widest mt-1 text-center">Asesoría Profesional Independiente HyS</p>
+            </div>
+
+            <div class="p-8 text-center">
+                <h2 class="text-2xl font-bold text-slate-800">Lic. Hernán Mariani</h2>
+                <p class="text-blue-600 font-medium mb-2 uppercase text-xs tracking-widest">Consultor</p>
+                
+                <div class="mb-8 space-y-1">
+                    <a href="mailto:marianihernanhoracio@gmail.com" class="text-slate-400 text-sm hover:text-blue-600 transition block">
+                        <i class="fas fa-envelope mr-1"></i> marianihernanhoracio@gmail.com
+                    </a>
+                    <p class="text-slate-400 text-sm">
+                        <i class="fas fa-mobile-alt mr-1"></i> 221-5578701
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <a href="tel:+542215578701" class="flex flex-col items-center justify-center p-5 bg-slate-50 rounded-3xl border border-slate-100 hover:bg-blue-50 transition group">
+                        <i class="fas fa-phone text-blue-600 text-xl mb-2 group-hover:scale-110 transition"></i>
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Llamar</span>
+                    </a>
+                    <a href="https://wa.me/542215578701" class="flex flex-col items-center justify-center p-5 bg-slate-50 rounded-3xl border border-slate-100 hover:bg-green-50 transition group">
+                        <i class="fab fa-whatsapp text-green-600 text-2xl mb-2 group-hover:scale-110 transition"></i>
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">WhatsApp</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección Privada -->
+        <div class="main-card bg-white shadow-xl p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Servicios Privados (HHM)</h3>
+                <i id="lockIcon" class="fas fa-lock text-green-500 text-xs"></i>
+            </div>
+
+            <div class="space-y-3">
+                <button onclick="checkAccess('charla')" class="service-btn w-full flex items-center justify-between p-5 bg-indigo-600 text-white rounded-2xl shadow-lg shadow-indigo-100">
+                    <div class="text-left">
+                        <p class="font-bold text-sm tracking-tight">✨ Charlas de 5'</p>
+                        <p class="text-[10px] opacity-80">Contenido técnico inmediato</p>
+                    </div>
+                    <i class="fas fa-bullhorn opacity-50"></i>
+                </button>
+
+                <button onclick="checkAccess('riesgo')" class="service-btn w-full flex items-center justify-between p-5 bg-slate-800 text-white rounded-2xl shadow-lg shadow-slate-200">
+                    <div class="text-left">
+                        <p class="font-bold text-sm tracking-tight">✨ Diagnóstico Express</p>
+                        <p class="text-[10px] opacity-80">Redacción técnica formal</p>
+                    </div>
+                    <i class="fas fa-clipboard-check opacity-50"></i>
+                </button>
+
+                <button onclick="checkAccess('ley')" class="service-btn w-full flex items-center justify-between p-5 bg-blue-900 text-white rounded-2xl shadow-lg shadow-blue-200">
+                    <div class="text-left">
+                        <p class="font-bold text-sm tracking-tight">✨ Consulta Normativa</p>
+                        <p class="text-[10px] opacity-80">Leyes y Decretos (SRT)</p>
+                    </div>
+                    <i class="fas fa-gavel opacity-50"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Login -->
+    <div id="loginModal" class="fixed inset-0 glass-modal hidden items-center justify-center z-50 p-6">
+        <div class="bg-white w-full max-w-xs rounded-[2rem] p-8 text-center shadow-2xl border border-white">
+            <i class="fas fa-user-shield text-4xl text-blue-600 mb-4"></i>
+            <h4 class="text-lg font-bold text-slate-800 mb-1">Acceso Privado</h4>
+            <p class="text-xs text-slate-400 mb-6">Ingrese su clave de Licenciado</p>
+            <input type="password" id="passInput" class="w-full bg-slate-100 border-none p-4 rounded-2xl text-center text-xl tracking-[0.5em] focus:ring-2 focus:ring-blue-500 outline-none mb-4" placeholder="••••">
+            <button onclick="verifyPass()" class="w-full py-4 bg-blue-600 text-white rounded-2xl font-bold shadow-lg shadow-blue-100 transition active:scale-95">Desbloquear</button>
+            <button onclick="closeLogin()" class="mt-4 text-slate-400 text-xs font-medium uppercase tracking-widest">Cancelar</button>
+        </div>
+    </div>
+
+    <!-- Modal IA -->
+    <div id="iaModal" class="fixed inset-0 glass-modal hidden items-center justify-center z-[60] p-4">
+        <div class="bg-white w-full max-w-sm rounded-[2.5rem] overflow-hidden flex flex-col max-h-[90vh] shadow-2xl">
+            <div id="iaHeader" class="p-6 text-white font-bold flex justify-between items-center bg-slate-800">
+                <span id="iaTitle" class="tracking-tight uppercase text-sm">Asistente PRO</span>
+                <button onclick="closeIA()" class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center"><i class="fas fa-times text-xs"></i></button>
+            </div>
+            <div class="p-6 space-y-4 overflow-y-auto">
+                <textarea id="iaInput" class="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm focus:ring-2 focus:ring-blue-500 outline-none" rows="3" placeholder="Describe el tema aquí..."></textarea>
+                <button id="genBtn" onclick="generate()" class="w-full py-4 bg-blue-600 text-white rounded-2xl font-bold flex items-center justify-center space-x-2 shadow-lg shadow-blue-100">
+                    <span id="btnText">GENERAR CON IA</span>
+                    <div id="btnLoad" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin hidden"></div>
+                </button>
+                <div id="iaOutput" class="hidden p-5 bg-blue-50 rounded-2xl text-[11px] text-slate-700 border border-blue-100 whitespace-pre-wrap leading-relaxed shadow-inner"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const apiKey = ""; 
+        const MASTER_PASS = "BILOINA";
+        let isUnlocked = false;
+        let pendingAction = null;
+        let currentMode = '';
+
+        function checkAccess(mode) {
+            if (isUnlocked) {
+                openIA(mode);
+            } else {
+                pendingAction = mode;
+                document.getElementById('loginModal').classList.replace('hidden', 'flex');
+                document.getElementById('passInput').focus();
+            }
+        }
+
+        function verifyPass() {
+            const val = document.getElementById('passInput').value;
+            if (val === MASTER_PASS) {
+                isUnlocked = true;
+                document.getElementById('lockIcon').classList.replace('fa-lock', 'fa-unlock-alt');
+                closeLogin();
+                if (pendingAction) openIA(pendingAction);
+            } else {
+                alert("Clave incorrecta");
+                document.getElementById('passInput').value = '';
+            }
+        }
+
+        function closeLogin() { document.getElementById('loginModal').classList.replace('flex', 'hidden'); }
+
+        function openIA(mode) {
+            currentMode = mode;
+            const iaModal = document.getElementById('iaModal');
+            document.getElementById('iaOutput').classList.add('hidden');
+            document.getElementById('iaInput').value = '';
+            iaModal.classList.replace('hidden', 'flex');
+            
+            const titles = { 'charla': 'Charla Técnica 5 min', 'riesgo': 'Informe de Diagnóstico', 'ley': 'Asesoría Normativa' };
+            document.getElementById('iaTitle').innerText = titles[mode];
+        }
+
+        function closeIA() { document.getElementById('iaModal').classList.replace('flex', 'hidden'); }
+
+        async function generate() {
+            const input = document.getElementById('iaInput').value;
+            const output = document.getElementById('iaOutput');
+            const btnText = document.getElementById('btnText');
+            const btnLoad = document.getElementById('btnLoad');
+
+            if (!input) return;
+            btnText.classList.add('hidden');
+            btnLoad.classList.remove('hidden');
+
+            const prompts = {
+                'charla': "Genera una charla de seguridad de 5 minutos técnica y profesional para trabajadores sobre: ",
+                'riesgo': "Redacta un hallazgo técnico formal para informe de auditoría (Riesgo, Ley aplicada y Recomendación) para: ",
+                'ley': "Actúa como especialista legal en H&S en Argentina. Explica la normativa SRT/Leyes aplicada a: "
+            };
+
+            try {
+                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: prompts[currentMode] + input }] }] })
+                });
+                const data = await res.json();
+                output.innerText = data.candidates?.[0]?.content?.parts?.[0]?.text || "No se pudo generar la respuesta.";
+                output.classList.remove('hidden');
+            } catch (e) {
+                output.innerText = "Error de conexión con la IA.";
+                output.classList.remove('hidden');
+            } finally {
+                btnText.classList.remove('hidden');
+                btnLoad.classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
+
+```
