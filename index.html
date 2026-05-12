@@ -10,16 +10,17 @@
         body { background-color: #f1f5f9; font-family: 'Inter', sans-serif; }
         .main-card { border-radius: 2.5rem; }
         .header-gradient { background: linear-gradient(180deg, #1d4ed8 0%, #1e40af 100%); }
-        .service-btn { transition: all 0.2s ease; }
+        .service-btn { transition: all 0.2s ease; cursor: pointer; }
         .service-btn:active { transform: scale(0.97); }
-        .glass-modal { background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(8px); }
+        .glass-modal { background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(8px); display: none; }
+        .glass-modal.active { display: flex; }
     </style>
 </head>
 <body class="flex flex-col items-center justify-start min-h-screen p-4 py-8 space-y-6">
 
     <div class="max-w-md w-full space-y-6">
         
-        <!-- Tarjeta Principal (Pública) -->
+        <!-- Tarjeta Principal -->
         <div class="main-card bg-white shadow-xl overflow-hidden">
             <div class="header-gradient p-10 flex flex-col items-center text-white relative">
                 <div class="bg-white p-3 rounded-2xl shadow-lg mb-4 w-20 h-20 flex items-center justify-center">
@@ -63,10 +64,10 @@
             </div>
 
             <div class="space-y-3">
-                <button onclick="checkAccess('charla')" class="service-btn w-full flex items-center justify-between p-5 bg-indigo-600 text-white rounded-2xl shadow-lg shadow-indigo-100">
+                <button onclick="checkAccess('charla')" class="service-btn w-full flex items-center justify-between p-5 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-2xl shadow-lg shadow-indigo-100">
                     <div class="text-left">
                         <p class="font-bold text-sm tracking-tight">✨ Charlas de 5'</p>
-                        <p class="text-[10px] opacity-80">Contenido técnico inmediato</p>
+                        <p class="text-[10px] opacity-80">Contenido técnico</p>
                     </div>
                     <i class="fas fa-bullhorn opacity-50"></i>
                 </button>
@@ -74,7 +75,7 @@
                 <button onclick="checkAccess('riesgo')" class="service-btn w-full flex items-center justify-between p-5 bg-slate-800 text-white rounded-2xl shadow-lg shadow-slate-200">
                     <div class="text-left">
                         <p class="font-bold text-sm tracking-tight">✨ Diagnóstico Express</p>
-                        <p class="text-[10px] opacity-80">Redacción técnica formal</p>
+                        <p class="text-[10px] opacity-80">Redacción de informes</p>
                     </div>
                     <i class="fas fa-clipboard-check opacity-50"></i>
                 </button>
@@ -82,7 +83,7 @@
                 <button onclick="checkAccess('ley')" class="service-btn w-full flex items-center justify-between p-5 bg-blue-900 text-white rounded-2xl shadow-lg shadow-blue-200">
                     <div class="text-left">
                         <p class="font-bold text-sm tracking-tight">✨ Consulta Normativa</p>
-                        <p class="text-[10px] opacity-80">Leyes y Decretos (SRT)</p>
+                        <p class="text-[10px] opacity-80">Leyes y Decretos</p>
                     </div>
                     <i class="fas fa-gavel opacity-50"></i>
                 </button>
@@ -90,23 +91,22 @@
         </div>
     </div>
 
-    <!-- Pie de página minimalista -->
     <p class="text-[9px] text-slate-400 uppercase tracking-[0.2em]">© APIHyS Consultoría</p>
 
     <!-- Modal Login -->
-    <div id="loginModal" class="fixed inset-0 glass-modal hidden items-center justify-center z-50 p-6">
+    <div id="loginModal" class="fixed inset-0 glass-modal items-center justify-center z-50 p-6">
         <div class="bg-white w-full max-w-xs rounded-[2rem] p-8 text-center shadow-2xl">
             <i class="fas fa-user-shield text-4xl text-blue-600 mb-4"></i>
             <h4 class="text-lg font-bold text-slate-800 mb-1">Acceso Privado</h4>
             <p class="text-xs text-slate-400 mb-6">Ingrese su clave de Licenciado</p>
             <input type="password" id="passInput" class="w-full bg-slate-100 border-none p-4 rounded-2xl text-center text-xl tracking-[0.5em] focus:ring-2 focus:ring-blue-500 outline-none mb-4" placeholder="••••">
             <button onclick="verifyPass()" class="w-full py-4 bg-blue-600 text-white rounded-2xl font-bold shadow-lg transition active:scale-95">Desbloquear</button>
-            <button onclick="closeLogin()" class="mt-4 text-slate-400 text-xs font-medium uppercase tracking-widest">Cancelar</button>
+            <button onclick="closeLogin()" class="mt-4 text-slate-400 text-xs font-medium uppercase tracking-widest block w-full">CANCELAR</button>
         </div>
     </div>
 
     <!-- Modal IA -->
-    <div id="iaModal" class="fixed inset-0 glass-modal hidden items-center justify-center z-[60] p-4">
+    <div id="iaModal" class="fixed inset-0 glass-modal items-center justify-center z-[60] p-4">
         <div class="bg-white w-full max-w-sm rounded-[2.5rem] overflow-hidden flex flex-col max-h-[90vh] shadow-2xl">
             <div id="iaHeader" class="p-6 text-white font-bold flex justify-between items-center bg-slate-800">
                 <span id="iaTitle" class="tracking-tight uppercase text-sm">Asistente PRO</span>
@@ -135,7 +135,7 @@
                 openIA(mode);
             } else {
                 pendingAction = mode;
-                document.getElementById('loginModal').classList.replace('hidden', 'flex');
+                document.getElementById('loginModal').classList.add('active');
                 document.getElementById('passInput').focus();
             }
         }
@@ -145,6 +145,7 @@
             if (val === MASTER_PASS) {
                 isUnlocked = true;
                 document.getElementById('lockIcon').classList.replace('fa-lock', 'fa-unlock-alt');
+                document.getElementById('lockIcon').classList.replace('text-green-500', 'text-blue-500');
                 closeLogin();
                 if (pendingAction) openIA(pendingAction);
             } else {
@@ -153,20 +154,22 @@
             }
         }
 
-        function closeLogin() { document.getElementById('loginModal').classList.replace('hidden', 'flex'); }
+        function closeLogin() { 
+            document.getElementById('loginModal').classList.remove('active'); 
+            document.getElementById('passInput').value = '';
+        }
 
         function openIA(mode) {
             currentMode = mode;
-            const iaModal = document.getElementById('iaModal');
             document.getElementById('iaOutput').classList.add('hidden');
             document.getElementById('iaInput').value = '';
-            iaModal.classList.replace('hidden', 'flex');
+            document.getElementById('iaModal').classList.add('active');
             
             const titles = { 'charla': 'Charla Técnica 5 min', 'riesgo': 'Informe de Diagnóstico', 'ley': 'Asesoría Normativa' };
             document.getElementById('iaTitle').innerText = titles[mode];
         }
 
-        function closeIA() { document.getElementById('iaModal').classList.replace('flex', 'hidden'); }
+        function closeIA() { document.getElementById('iaModal').classList.remove('active'); }
 
         async function generate() {
             const input = document.getElementById('iaInput').value;
@@ -180,8 +183,8 @@
 
             const prompts = {
                 'charla': "Genera una charla de seguridad de 5 minutos técnica y profesional para trabajadores sobre: ",
-                'riesgo': "Redacta un hallazgo técnico formal para informe de auditoría (Riesgo, Ley aplicada y Recomendación) para: ",
-                'ley': "Actúa como especialista legal en H&S en Argentina. Explica la normativa SRT/Leyes aplicada a: "
+                'riesgo': "Redacta un hallazgo técnico formal para informe de auditoría de Higiene y Seguridad (Riesgo, Ley aplicada y Recomendación) para: ",
+                'ley': "Actúa como especialista legal en Higiene y Seguridad en Argentina. Explica detalladamente la normativa SRT o Leyes aplicada a: "
             };
 
             try {
@@ -191,10 +194,10 @@
                     body: JSON.stringify({ contents: [{ parts: [{ text: prompts[currentMode] + input }] }] })
                 });
                 const data = await res.json();
-                output.innerText = data.candidates?.[0]?.content?.parts?.[0]?.text || "No se pudo generar la respuesta.";
+                output.innerText = data.candidates?.[0]?.content?.parts?.[0]?.text || "Error al procesar la respuesta.";
                 output.classList.remove('hidden');
             } catch (e) {
-                output.innerText = "Error de conexión con la IA.";
+                output.innerText = "Error de red. Intente nuevamente.";
                 output.classList.remove('hidden');
             } finally {
                 btnText.classList.remove('hidden');
